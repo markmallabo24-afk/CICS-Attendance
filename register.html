@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="login-container">
+    <h2>Create Account</h2>
+
+    <form id="registerForm">
+      <label>Username</label>
+      <input type="text" id="newUsername" required />
+
+      <label>Password</label>
+      <input type="password" id="newPassword" required />
+
+      <button type="submit">Register</button>
+      <p id="register-message"></p>
+    </form>
+
+    <div class="links">
+      <p>Already have an account? <a href="index.html">Login</a></p>
+    </div>
+  </div>
+
+  <script>
+    const registerForm = document.getElementById("registerForm");
+    const message = document.getElementById("register-message");
+
+    registerForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.getElementById("newUsername").value.trim();
+      const password = document.getElementById("newPassword").value.trim();
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+
+      if (users.find(u => u.username === username)) {
+        message.textContent = "Username already exists!";
+        message.style.color = "red";
+      } else {
+        users.push({ username, password });
+        localStorage.setItem("users", JSON.stringify(users));
+        message.textContent = "Registration successful! You can now login.";
+        message.style.color = "green";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attendance</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="login-container">
+    <h2>Welcome to Attendance Page</h2>
+    <p id="welcomeMessage"></p>
+    <button id="markAttendance">Mark Attendance</button>
+    <p id="status"></p>
+    <button id="logout">Logout</button>
+  </div>
+
+  <script>
+    const user = localStorage.getItem("loggedInUser");
+    if (!user) {
+      window.location.href = "index.html";
+    }
+
+    document.getElementById("welcomeMessage").textContent = `Hello, ${user}!`;
+
+    document.getElementById("markAttendance").addEventListener("click", () => {
+      const now = new Date();
+      const attendanceRecord = JSON.parse(localStorage.getItem("attendance")) || {};
+      attendanceRecord[user] = now.toLocaleString();
+      localStorage.setItem("attendance", JSON.stringify(attendanceRecord));
+      document.getElementById("status").textContent =
+        `Attendance marked at ${now.toLocaleTimeString()}`;
+    });
+
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

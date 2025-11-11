@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background: #5563de;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container" style="width: 90%; max-width: 600px;">
+    <h2>Admin Dashboard</h2>
+    <p>Welcome, Admin!</p>
+
+    <table id="userTable">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Last Attendance</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <button id="clearAttendance">Clear Attendance Records</button>
+    <button id="logout">Logout</button>
+  </div>
+
+  <script>
+    const user = localStorage.getItem("loggedInUser");
+    if (user !== "admin") {
+      window.location.href = "index.html";
+    }
+
+    const attendanceData = JSON.parse(localStorage.getItem("attendance")) || {};
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+
+    const tbody = document.querySelector("#userTable tbody");
+    tbody.innerHTML = "";
+
+    users.forEach(u => {
+      if (u.username !== "admin") {
+        const row = document.createElement("tr");
+        const time = attendanceData[u.username] || "Not Marked Yet";
+        row.innerHTML = `<td>${u.username}</td><td>${time}</td>`;
+        tbody.appendChild(row);
+      }
+    });
+
+    document.getElementById("clearAttendance").addEventListener("click", () => {
+      if (confirm("Are you sure you want to clear all attendance records?")) {
+        localStorage.removeItem("attendance");
+        alert("All attendance records cleared!");
+        window.location.reload();
+      }
+    });
+
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

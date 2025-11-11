@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forgot Password</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="login-container">
+    <h2>Forgot Password</h2>
+
+    <form id="forgotForm">
+      <label>Enter your username</label>
+      <input type="text" id="forgotUsername" required />
+      <button type="submit">Reset Password</button>
+      <p id="forgot-message"></p>
+    </form>
+
+    <div class="links">
+      <p>Remembered? <a href="index.html">Back to Login</a></p>
+    </div>
+  </div>
+
+  <script>
+    const forgotForm = document.getElementById("forgotForm");
+    const forgotMsg = document.getElementById("forgot-message");
+
+    forgotForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.getElementById("forgotUsername").value.trim();
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+
+      const user = users.find(u => u.username === username);
+      if (user) {
+        const newPass = prompt("Enter your new password:");
+        if (newPass) {
+          user.password = newPass;
+          localStorage.setItem("users", JSON.stringify(users));
+          forgotMsg.textContent = "Password reset successful!";
+          forgotMsg.style.color = "green";
+        }
+      } else {
+        forgotMsg.textContent = "User not found!";
+        forgotMsg.style.color = "red";
+      }
+    });
+  </script>
+</body>
+</html>
